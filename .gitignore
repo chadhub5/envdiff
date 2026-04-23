@@ -1,0 +1,15 @@
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+.venv/
+env/
+.ruff_cache/
+.eggs/
+.DS_Store
+.tox/
+.Python
+.coverage
+dist/
+.cache/
