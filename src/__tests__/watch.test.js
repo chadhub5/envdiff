@@ -76,4 +76,12 @@ describe('watchEnvFiles', () => {
     const handle = watchEnvFiles([f1, f2], { onChange: () => {} });
     expect(() => handle.stop()).not.toThrow();
   });
+
+  it('stop() is idempotent — calling it twice does not throw', () => {
+    const f1 = writeEnvFile(tmpDir, '.env.x', 'K=v');
+    const f2 = writeEnvFile(tmpDir, '.env.y', 'K=v');
+    const handle = watchEnvFiles([f1, f2], { onChange: () => {} });
+    handle.stop();
+    expect(() => handle.stop()).not.toThrow();
+  });
 });
