@@ -26,6 +26,12 @@ async function resolveCommand(argv) {
     return;
   }
 
+  if (paths.length === 0) {
+    console.error('No env files found matching the provided input.');
+    process.exitCode = 1;
+    return;
+  }
+
   const results = paths.map((p) => ({
     label: labelFromPath(p),
     path: p,
