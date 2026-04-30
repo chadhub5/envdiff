@@ -84,4 +84,25 @@ describe('watchEnvFiles', () => {
     handle.stop();
     expect(() => handle.stop()).not.toThrow();
   });
+
+  it('triggers onChange again when a watched file is modified', (done) => {
+    const f1 = writeEnvFile(tmpDir, '.env.dev', 'A=1');
+    const f2 = writeEnvFile(tmpDir, '.env.prod', 'A=1');
+    let callCount = 0;
+    const handle = watchEnvFiles([f1, f2], {
+      onChange(result, clean) {
+        callCount += 1;
+        if (callCount === 1) {
+          // Initial call — files match, now introduce a difference
+          expect(clean).toBe(true);
+          fs.writeFileSync(f1, 'A=1\nB=2');
+        } else {
+          // Second call after file change — should detect diff
+          expect(clean).toBe(false);
+          handle.stop();
+          done();
+        }
+      },
+    });
+  });
 });
